@@ -11,17 +11,16 @@ msg = EmailMessage()
 msg['Subject'] = 'Grab dinner this weekend?'
 msg['From'] = EMAIL_ADDRESS
 msg['To'] = 'harasta.ivan@gmail.com'
-msg.set_content('Image attached...')
+msg.set_content('This is a plain text email!')
 
-files = ['JF.jpg']
-
-for file in files:
-    with open(file, 'rb') as f:
-        file_data = f.read()
-        file_type = imghdr.what(f.name)
-        file_name = f.name
-
-    msg.add_attachment(file_data, maintype='image', subtype=file_type, filename=file_name)
+msg.add_alternative("""\
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1 style="color: SlateGray;">This is an HTML Email!</h1>
+    </body>
+</html>
+""", subtype='html')
 
 with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
     smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
